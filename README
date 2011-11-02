@@ -1,0 +1,19 @@
+!!!WARNING!!!
+
+This script has not quite had the final polishing.
+
+Even when it has, it may mess up your repo. Make sure, that you are working
+on a copy.
+(cp -R <your-repo> <name-of-copy>).
+
+It can't safely zip across merges.
+
+DESCRIPTION
+This script combines two branches into one with the commits date ordered.
+
+You will have to clean up yourself afterwards.
+
+I recommend gitg for visualizing states before and after.
+
+Usage:
+git-zip-branches.sh <branch1> <branch2>

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# A simple script to combine two branches in a new branch date-ordered.
+# It does not know anything about tags and child commits.
+# Use gitg (fx) to visualize the result.
+
+# Issues:
+# * Does not work across merges - check !?
+
+# The logic is by FauxFaux (on git irc: irc.freenode.org #git)
+# Adapted to script by phluks: http://github.com/phluks
+
+branch1=$1
+branch2=$2
+
+OK=1;
+
+git checkout $(git merge-base $branch1 $branch2);
+git checkout -b combined-$branch1-$branch2;
+
+#git rev-list --date-order --reverse $(git merge-base $branch1 HEAD)..$branch1 $(git merge-base $branch2 HEAD)..$branch2 | 
+git rev-list --date-order --reverse $branch1 $branch2 ^HEAD | 
+while read line; do 
+git cherry-pick $line; 
+## No this does not work, returns false if nothing to commit:
+#if [ "$?" != 0 ]; then
+#OK=0;
+#echo '';
+#echo "Your zipper got stuck! (Ouch!)";
+#echo '';
+#exit 1;
+#fi
+done
+
+# Everything is ok
+if [ "$OK" = 1 ]; then
+echo '';
+echo "You now have the combined branch in combined-$branch1-$branch2"
+echo ''
+echo 'You may want to clean up yourself'
+echo '';
+fi
+
